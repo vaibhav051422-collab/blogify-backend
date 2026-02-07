@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head') %>
+  <title>Add Blog</title>
+</head>
+
+<body>
+  <%- include('./partials/nav') %>
+
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-7">
+
+        <h2 class="mb-4">Add a New Blog</h2>
+
+        <% if (typeof error !== 'undefined') { %>
+          <div class="alert alert-danger">
+            <%= error %>
+          </div>
+        <% } %>
+
+        <form action="/blog/add" method="POST">
+          <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input type="text" name="title" class="form-control" required placeholder="Enter blog title">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Body</label>
+            <textarea name="body" class="form-control" rows="10" required placeholder="Write your blog content here..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Add Blog</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <%- include('./partials/script') %>
+</body>
+</html>
