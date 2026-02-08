@@ -2,12 +2,19 @@ const { validateToken } = require("../services/authentication");
 
 function checkAuth(req, res, next) {
   const token = req.cookies?.token;
-  if (!token) return res.redirect("/user/signin");
 
-  const user = validateToken(token);
-  if (!user) return res.redirect("/user/signin");
+  if (!token) {
+    req.user = null;
+    return next();
+  }
 
-  req.user = user;
+  try {
+    const user = validateToken(token);
+    req.user = user || null;
+  } catch {
+    req.user = null;
+  }
+
   next();
 }
 

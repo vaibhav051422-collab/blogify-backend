@@ -11,23 +11,16 @@ router.get("/signin", (req, res) => {
 router.get("/signup", (req, res) => {
   res.render("signup");
 });
-router.get("/signup", (req, res) => {
-  return res.render("signup");
-});
 
 router.post("/signup", async (req, res) => {
   const { fullName, email, password } = req.body;
 
   try {
-    await User.create({
-      fullName,
-      email,
-      password,
-    });
+    await User.create({ fullName, email, password });
     return res.redirect("/user/signin");
-  } catch (error) {
+  } catch {
     return res.render("signup", {
-      error: "Registration failed. Try a different email.",
+      error: "Registration failed. Try another email.",
     });
   }
 });
@@ -36,16 +29,24 @@ router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
-  if (!user) return res.render("signin", { error: "Invalid credentials" });
+  if (!user) {
+    return res.render("signin", { error: "Invalid credentials" });
+  }
 
   const ok = await user.matchPassword(password);
-  if (!ok) return res.render("signin", { error: "Invalid credentials" });
+  if (!ok) {
+    return res.render("signin", { error: "Invalid credentials" });
+  }
 
   const token = createTokenForUser(user);
 
-  return res.cookie("token", token, {
-    
-  }).redirect("/");
+  return res
+    .cookie("token", token, { httpOnly: true })
+    .redirect("/");
+});
+
+router.get("/logout", (req, res) => {
+  res.clearCookie("token").redirect("/user/signin");
 });
 
 module.exports = router;

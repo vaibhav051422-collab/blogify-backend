@@ -1,145 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <%- include('./partials/head') %>
   <title>Add Blog</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --primary-color: #4f46e5;
+      --primary: #4f46e5;
       --primary-hover: #4338ca;
-      --bg-color: #f8fafc;
-      --card-bg: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --border-color: #e2e8f0;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
       --error-bg: #fef2f2;
       --error-text: #dc2626;
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-main);
+      background-color: var(--bg);
+      color: var(--text);
       margin: 0;
+      min-height: 100vh;
+    }
+
+    .page {
       display: flex;
       justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
+      padding: 60px 20px;
     }
 
     .container {
-      background: var(--card-bg);
+      background: var(--card);
       width: 100%;
-      max-width: 600px;
+      max-width: 700px;
       padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
     }
 
     h1 {
-      margin-top: 0;
-      font-size: 1.875rem;
+      margin: 0 0 32px;
+      font-size: 1.9rem;
       font-weight: 700;
-      color: var(--text-main);
       text-align: center;
-      margin-bottom: 24px;
     }
 
     .error {
-      background-color: var(--error-bg);
+      background: var(--error-bg);
       color: var(--error-text);
-      padding: 12px 16px;
-      border-radius: 6px;
+      padding: 14px 16px;
+      border-radius: 8px;
       border: 1px solid #fee2e2;
-      font-size: 0.875rem;
-      margin-bottom: 20px;
+      font-size: 0.9rem;
+      margin-bottom: 24px;
     }
 
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     label {
       display: block;
+      font-size: 0.9rem;
       font-weight: 600;
-      font-size: 0.875rem;
       margin-bottom: 8px;
     }
 
-    input[type="text"],
+    input,
     textarea {
       width: 100%;
-      padding: 12px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      font-family: inherit;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
       font-size: 1rem;
-      box-sizing: border-box; /* Crucial for padding */
+      font-family: inherit;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    input:focus, 
+    input:focus,
     textarea:focus {
       outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
     }
 
     textarea {
-      resize: vertical; /* Allow vertical resizing only */
-      min-height: 150px;
+      min-height: 180px;
+      resize: vertical;
     }
 
     button {
       width: 100%;
-      background-color: var(--primary-color);
-      color: white;
-      padding: 12px;
+      background: var(--primary);
+      color: #fff;
+      padding: 14px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.2s;
+      transition: background-color 0.2s, transform 0.05s;
     }
 
     button:hover {
-      background-color: var(--primary-hover);
+      background: var(--primary-hover);
     }
 
-    /* Subtle placeholder color */
+    button:active {
+      transform: scale(0.98);
+    }
+
     ::placeholder {
-      color: var(--text-muted);
+      color: var(--muted);
       opacity: 0.7;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Add a New Blog</h1>
 
-    <% if (typeof error !== 'undefined') { %>
-      <div class="error">
-        <%= error %>
-      </div>
-    <% } %>
+  <%- include('./partials/nav') %>
 
-    <form action="/blog/add" method="POST">
-      <div class="form-group">
-        <label for="title">Blog Title</label>
-        <input type="text" id="title" name="title" />
-      </div>
+  <main class="page">
+    <div class="container">
+      <h1>Add a New Blog</h1>
 
-      <div class="form-group">
-        <label for="body">Blog Body</label>
-        <textarea id="body" name="body" ></textarea>
-      </div>
+      <% if (typeof error !== 'undefined') { %>
+        <div class="error"><%= error %></div>
+      <% } %>
 
-      <button type="submit">Publish Blog</button>
-    </form>
-  </div>
+      <form action="/add/blog" method="POST">
+        <div class="form-group">
+          <label for="title">Blog Title</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder="Enter blog title"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="body">Blog Body</label>
+          <textarea
+            id="body"
+            name="body"
+            placeholder="Write your blog content here..."
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit">Publish Blog</button>
+      </form>
+    </div>
+  </main>
+
+  <%- include('./partials/script') %>
 </body>
 </html>
