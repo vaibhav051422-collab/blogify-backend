@@ -12,7 +12,7 @@ const blogRoute = require("./routes/blogs");
 const Blog = require("./models/blog");
 const mongoose = require("mongoose");
 
-const PORT = 5677;
+const PORT = process.env.PORT||5677;
 
 
 app.set("view engine", "ejs");
